@@ -1,4 +1,10 @@
-import { BsBroadcast, BsCart, BsEnvelope } from "react-icons/bs";
+import {
+  BsBroadcast,
+  BsCart,
+  BsEnvelope,
+  BsMegaphone,
+  BsPeople,
+} from "react-icons/bs";
 
 export default function VerticalMenu() {
   return (
@@ -11,6 +17,15 @@ export default function VerticalMenu() {
           >
             <BsBroadcast className="mr-4 text-2xl" />
             News Feed
+          </a>
+        </li>
+        <li>
+          <a
+            href="#"
+            className="flex items-center pl-4 py-3 text-base font-semibold border-l-4 border-bg-verticalMenu text-cyan-700 transition ease-in-out delay-150 hover:bg-bg-hoverVertical hover:border-cyan-700 hover:border-l-4"
+          >
+            <BsPeople className="mr-4 text-2xl" />
+            Friends
           </a>
         </li>
         <li>
@@ -36,17 +51,8 @@ export default function VerticalMenu() {
             href="#"
             className="flex items-center pl-4 py-3 text-base font-semibold border-l-4 border-bg-verticalMenu text-cyan-700 transition ease-in-out delay-150 hover:bg-bg-hoverVertical hover:border-cyan-700 hover:border-l-4"
           >
-            <BsCart className="mr-4 text-2xl" />
+            <BsMegaphone className="mr-4 text-2xl" />
             Events
-          </a>
-        </li>
-        <li>
-          <a
-            href="#"
-            className="flex items-center pl-4 py-3 text-base font-semibold border-l-4 border-bg-verticalMenu text-cyan-700 transition ease-in-out delay-150 hover:bg-bg-hoverVertical hover:border-cyan-700 hover:border-l-4"
-          >
-            <BsCart className="mr-4 text-2xl" />
-            Groups
           </a>
         </li>
       </ul>

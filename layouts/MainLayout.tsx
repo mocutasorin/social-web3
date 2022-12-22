@@ -22,7 +22,7 @@ export default function MainLayout({ children, title }: Props) {
       <div className="flex w-full flex-col sm:flex-row">
         <VerticalMenu />
         <div className="bg-bg-mainLayout flex flex-1 flex-col sm:flex-row gap-3 p-3">
-          <main className="flex pt-1 px-3 flex-1 flex-col gap-4">
+          <main className="flex pt-1 px-2 flex-1 flex-col gap-4">
             {children}
           </main>
           <Sidebar />

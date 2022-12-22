@@ -1,5 +1,5 @@
 import { SyntheticEvent, useRef } from "react";
-import { BsImage } from "react-icons/bs";
+import { BsImage, BsPersonPlusFill } from "react-icons/bs";
 
 const AddPost = () => {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -11,9 +11,9 @@ const AddPost = () => {
     textareaRef.current.style.height = `${target.scrollHeight}px`;
   };
   return (
-    <div className="bg-white border-gray-200 border-solid border p-10">
+    <div className="bg-white border-gray-200 border-solid border pt-10 pb-5">
       {/* Text input */}
-      <div className="flex flex-1 flex-row w-full">
+      <div className="flex flex-1 flex-row w-full px-10 pb-5">
         <img
           className="h-8 w-8 rounded-full"
           src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
@@ -27,13 +27,18 @@ const AddPost = () => {
         ></textarea>
       </div>
       {/* Call to action buttons */}
-      <div>
-        <div>
-          <a href="#" className="flex items-center text-gray-800 font-semibold">
-            <BsImage className="mr-3 text-xl" />
-            Photo/Video
-          </a>
-        </div>
+      <div className="flex justify-between items-center pt-5 border-t px-10">
+        <a href="#" className="flex items-center text-gray-800 font-semibold">
+          <BsImage className="mr-3 text-xl" />
+          <span className="hidden md:block">Photo/Video</span>
+        </a>
+        <a href="#" className="flex items-center text-gray-800 font-semibold">
+          <BsPersonPlusFill className="mr-3 text-xl" />
+          <span className="hidden md:block">Tag Friends</span>
+        </a>
+        <button className="bg-gray-300 px-10 py-2 font-semibold hover:bg-violet-600 hover:text-white transition ease-in-out delay-100 ">
+          Post
+        </button>
       </div>
     </div>
   );

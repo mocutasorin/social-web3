@@ -1,11 +1,9 @@
+import News from "./widgets/News";
+
 const Sidebar = () => {
   return (
-    <aside className="bg-white px-3 pt-4 flex w-1/4">
-      <ul>
-        <li>
-          <a href="#">Sidebar</a>
-        </li>
-      </ul>
+    <aside className="gap-4 flex flex-col w-1/3 pt-1">
+      <News />
     </aside>
   );
 };
