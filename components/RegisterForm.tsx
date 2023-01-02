@@ -1,9 +1,16 @@
-import { Dispatch, SetStateAction } from "react";
+import React, { Dispatch, SetStateAction, useState } from "react";
 import { Field, Form, Formik } from "formik";
+import DatePicker from "react-datepicker";
+import DatePickerField from "./DatePickerField";
 
 interface FormValues {
+  first_name: string;
+  last_name: string;
   email: string;
   password: string;
+  birth_date: string;
+  genre: string;
+  agreement: boolean;
 }
 
 type Props = {
@@ -12,7 +19,30 @@ type Props = {
 };
 
 const RegisterForm = ({ showForm, setShowForm }: Props) => {
-  const initialValues: FormValues = { email: "", password: "" };
+  // Date input default values and setter
+  const today = new Date().toISOString().substring(0, 10);
+  const [date, setDate] = useState(today);
+  const [isChecked, setIsChecked] = useState(false);
+
+  // Form initial values
+  const initialValues: FormValues = {
+    first_name: "",
+    last_name: "",
+    email: "",
+    password: "",
+    birth_date: date,
+    genre: "",
+    agreement: false,
+  };
+
+  //   Input handlers (Date and Checkbox)
+  const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setDate(e.target.value);
+  };
+
+  const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setIsChecked(!isChecked);
+  };
   return (
     <div
       id="authentication-modal"
@@ -57,167 +87,155 @@ const RegisterForm = ({ showForm, setShowForm }: Props) => {
                 actions.setSubmitting(false);
               }}
             >
-              <Form className="space-y-6" action="#">
-                <div className="grid gap-6 mb-6 md:grid-cols-2">
-                  <div>
-                    <label
-                      htmlFor="first_name"
-                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                    >
-                      First name
-                    </label>
-                    <input
-                      type="text"
-                      id="first_name"
-                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                      placeholder="John"
-                      required
-                    />
-                  </div>
-                  <div>
-                    <label
-                      htmlFor="last_name"
-                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                    >
-                      Last name
-                    </label>
-                    <input
-                      type="text"
-                      id="last_name"
-                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                      placeholder="Doe"
-                      required
-                    />
-                  </div>
-                </div>
-                <div>
-                  <label
-                    htmlFor="email"
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                  >
-                    Email
-                  </label>
-                  <Field
-                    type="email"
-                    name="email"
-                    id="email"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
-                    placeholder="name@company.com"
-                    required
-                  />
-                </div>
-                <div>
-                  <label
-                    htmlFor="password"
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                  >
-                    Password
-                  </label>
-                  <Field
-                    type="password"
-                    name="password"
-                    id="password"
-                    placeholder="••••••••"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
-                    required
-                  />
-                </div>
-                <div>
-                  <label
-                    htmlFor="birth_date"
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                  >
-                    Birth date
-                  </label>
-                  <input
-                    type="date"
-                    id="birth_date"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    placeholder="John"
-                    required
-                  />
-                </div>
-                <div>
-                  <p className="text-sm mb-2 block font-medium text-gray-900 dark:text-white">
-                    Genre:
-                  </p>
-                  <ul className="grid gap-6 w-full md:grid-cols-3">
-                    <li>
+              {({ values, setFieldValue }) => (
+                <Form className="space-y-2" action="#">
+                  <div className="grid gap-2 mb-6 md:grid-cols-2">
+                    <div>
                       <input
-                        type="radio"
-                        id="female"
-                        name="genre"
-                        value="female"
-                        className="hidden peer"
-                        required
-                      />
-                      <label
-                        htmlFor="female"
-                        className="inline-flex justify-center items-center p-2 w-full text-gray-500 bg-white rounded-lg border border-gray-200 cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 dark:peer-checked:text-blue-500 peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700"
-                      >
-                        <div className="w-full">Female</div>
-                      </label>
-                    </li>
-                    <li>
-                      <input
-                        type="radio"
-                        id="male"
-                        name="genre"
-                        value="male"
-                        className="hidden peer"
-                        required
-                      />
-                      <label
-                        htmlFor="male"
-                        className="inline-flex justify-center items-center p-2 w-full text-gray-500 bg-white rounded-lg border border-gray-200 cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 dark:peer-checked:text-blue-500 peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700"
-                      >
-                        <div className="w-full">Male</div>
-                      </label>
-                    </li>
-                    <li>
-                      <input
-                        type="radio"
-                        id="custom"
-                        name="genre"
-                        value="custom"
-                        className="hidden peer"
-                        required
-                      />
-                      <label
-                        htmlFor="custom"
-                        className="inline-flex justify-center items-center p-2 w-full text-gray-500 bg-white rounded-lg border border-gray-200 cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 dark:peer-checked:text-blue-500 peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700"
-                      >
-                        <div className="w-full">Custom</div>
-                      </label>
-                    </li>
-                  </ul>
-                </div>
-                <div className="flex justify-between">
-                  <div className="flex items-start">
-                    <div className="flex items-center h-5">
-                      <Field
-                        id="remember"
-                        type="checkbox"
-                        value=""
-                        className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:bg-gray-600 dark:border-gray-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800"
+                        type="text"
+                        id="first_name"
+                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                        placeholder="First name"
                         required
                       />
                     </div>
-                    <label
-                      htmlFor="remember"
-                      className="ml-2 text-xs font-medium text-gray-900 dark:text-gray-300"
-                    >
-                      I agree to the terms and conditions of this website
-                    </label>
+                    <div>
+                      <input
+                        type="text"
+                        id="last_name"
+                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                        placeholder="Last name"
+                        required
+                      />
+                    </div>
                   </div>
-                </div>
-                <button
-                  type="submit"
-                  className="w-full text-white bg-gradient-to-r from-violet-500 to-fuchsia-500 hover:to-violet-500 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                >
-                  Login to your account
-                </button>
-              </Form>
+                  <div>
+                    <Field
+                      type="email"
+                      name="email"
+                      id="email"
+                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                      placeholder="E-mail"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label
+                      htmlFor="password"
+                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    >
+                      Password
+                    </label>
+                    <Field
+                      type="password"
+                      name="password"
+                      id="password"
+                      placeholder="••••••••"
+                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label
+                      htmlFor="birth_date"
+                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    >
+                      Birth date
+                    </label>
+                    <DatePickerField />
+                    <input
+                      type="date"
+                      id="birth_date"
+                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                      required
+                      value={values.birth_date}
+                      onChange={() => setFieldValue}
+                    />
+                  </div>
+                  <div>
+                    <p className="text-sm mb-2 block font-medium text-gray-900 dark:text-white">
+                      Genre:
+                    </p>
+                    <ul className="grid gap-2 w-full md:grid-cols-3">
+                      <li>
+                        <Field
+                          type="radio"
+                          id="female"
+                          name="genre"
+                          value="female"
+                          className="hidden peer"
+                          required
+                        />
+                        <label
+                          htmlFor="female"
+                          className="inline-flex justify-center items-center p-2 w-full text-gray-500 bg-white rounded-lg border border-gray-200 cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 dark:peer-checked:text-blue-500 peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700"
+                        >
+                          <div className="w-full">Female</div>
+                        </label>
+                      </li>
+                      <li>
+                        <Field
+                          type="radio"
+                          id="male"
+                          name="genre"
+                          value="male"
+                          className="hidden peer"
+                          required
+                        />
+                        <label
+                          htmlFor="male"
+                          className="inline-flex justify-center items-center p-2 w-full text-gray-500 bg-white rounded-lg border border-gray-200 cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 dark:peer-checked:text-blue-500 peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700"
+                        >
+                          <div className="w-full">Male</div>
+                        </label>
+                      </li>
+                      <li>
+                        <Field
+                          type="radio"
+                          id="custom"
+                          name="genre"
+                          value="custom"
+                          className="hidden peer"
+                          required
+                        />
+                        <label
+                          htmlFor="custom"
+                          className="inline-flex justify-center items-center p-2 w-full text-gray-500 bg-white rounded-lg border border-gray-200 cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 dark:peer-checked:text-blue-500 peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700"
+                        >
+                          <div className="w-full">Custom</div>
+                        </label>
+                      </li>
+                    </ul>
+                  </div>
+                  <div className="flex justify-between py-3">
+                    <div className="flex items-start">
+                      <div className="flex items-center h-5">
+                        <Field
+                          name="agreement"
+                          id="agreement"
+                          type="checkbox"
+                          value=""
+                          className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:bg-gray-600 dark:border-gray-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800"
+                          required
+                          checked={values.agreement}
+                        />
+                      </div>
+                      <label
+                        htmlFor="remember"
+                        className="ml-2 text-xs font-medium text-gray-900 dark:text-gray-300"
+                      >
+                        I agree to the terms and conditions of this website
+                      </label>
+                    </div>
+                  </div>
+                  <button
+                    type="submit"
+                    className="w-full text-white bg-gradient-to-r from-violet-500 to-fuchsia-500 hover:to-violet-500 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                  >
+                    Register
+                  </button>
+                </Form>
+              )}
             </Formik>
           </div>
         </div>
