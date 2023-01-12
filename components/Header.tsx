@@ -1,8 +1,10 @@
+import Link from "next/link";
 import { useState } from "react";
 import {
   BsFillBellFill,
   BsFillPersonPlusFill,
   BsHouseDoor,
+  BsPerson,
   BsPlusSquare,
 } from "react-icons/bs";
 import SearchBar from "./SearchBar";
@@ -13,6 +15,7 @@ type Props = {
 
 export default function Header({ title }: Props) {
   const [isOpen, setIsOpen] = useState(false);
+  const user = null;
   return (
     <>
       <nav>
@@ -88,17 +91,28 @@ export default function Header({ title }: Props) {
                   id="navbar-search"
                 >
                   <div className="relative ml-3 md:w-1/2 flex justify-center items-center sm:w-full md:order-2">
-                    <a
-                      href="#"
-                      className="text-lg font-semibold px-2 text-gray-700 flex items-center"
-                    >
-                      <img
-                        className="h-8 w-8 rounded-full"
-                        src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                        alt=""
-                      />
-                      <span className="pl-2">Sam Bankman</span>
-                    </a>
+                    {user ? (
+                      <a
+                        href="#"
+                        className="text-lg font-semibold px-2 text-gray-700 flex items-center"
+                      >
+                        <img
+                          className="h-8 w-8 rounded-full"
+                          src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                          alt=""
+                        />
+                        <span className="pl-2">Sam Bankman</span>
+                      </a>
+                    ) : (
+                      <Link
+                        href="/auth"
+                        className="text-lg font-semibold px-2 text-gray-700 flex items-center"
+                      >
+                        <span className="px-3 py-1 bg-violet-800 text-white rounded-lg text-base">
+                          Sign In
+                        </span>
+                      </Link>
+                    )}
                     <span className="text-gray-300 font-thin">|</span>
                     <a
                       href="#"
@@ -181,20 +195,30 @@ export default function Header({ title }: Props) {
           id="mobile-menu"
         >
           <div className=" px-2 pt-2 pb-3">
-            <a
-              href="#"
-              className="text-lg font-semibold px-3 py-4 text-gray-700 flex items-center hover:bg-gray-700 hover:text-white"
-            >
-              <img
-                className="h-8 w-8 rounded-full"
-                src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                alt=""
-              />
-              <span className="pl-2 ">Sam Bankman </span>
-              <span className="text-gray-500 font-thin pl-2 hover:text-white">
-                | View Profile
-              </span>
-            </a>
+            {user ? (
+              <a
+                href="#"
+                className="text-lg font-semibold px-3 py-4 text-gray-700 flex items-center hover:bg-gray-700 hover:text-white"
+              >
+                <img
+                  className="h-8 w-8 rounded-full"
+                  src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                  alt=""
+                />
+                <span className="pl-2 ">Sam Bankmam </span>
+                <span className="text-gray-500 font-thin pl-2 hover:text-white">
+                  | View Profile
+                </span>
+              </a>
+            ) : (
+              <a
+                href="#"
+                className="text-lg font-semibold px-3 py-4 text-gray-700 flex items-center hover:bg-gray-700 hover:text-white"
+              >
+                <BsPerson className="mr-4 text-xl" />
+                <span className="pl-2 ">Sign In </span>
+              </a>
+            )}
             <a
               href="#"
               className="flex px-3 py-4 items-center text-lg font-semibold hover:bg-gray-700 hover:text-white text-gray-600"

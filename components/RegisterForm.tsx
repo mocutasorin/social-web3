@@ -1,8 +1,11 @@
 import React, { Dispatch, SetStateAction, useState } from "react";
 import { Field, Form, Formik } from "formik";
-import DatePicker from "react-datepicker";
+import * as Yup from "yup";
+import differenceInYears from "date-fns/differenceInYears";
+
 import DatePickerField from "./DatePickerField";
 
+// Types--/--Interfaces
 interface FormValues {
   first_name: string;
   last_name: string;
@@ -18,11 +21,34 @@ type Props = {
   setShowForm: Dispatch<SetStateAction<boolean>>;
 };
 
+let RegisterSchema = Yup.object().shape({
+  first_name: Yup.string().required("***required"),
+  last_name: Yup.string().required("***required"),
+  email: Yup.string().email().required("***required"),
+  password: Yup.string()
+    .min(8, "The password may contain at least 8 chars")
+    .required("***required"),
+  birth_date: Yup.date()
+    .test("birth_date", "You should have 18 years", function (value) {
+      return differenceInYears(new Date(), new Date(value)) >= 18;
+    })
+    .required("***required"),
+  agreement: Yup.bool().oneOf(
+    [true],
+    "You need to accept our Terms and Conditions"
+  ),
+});
+
 const RegisterForm = ({ showForm, setShowForm }: Props) => {
-  // Date input default values and setter
-  const today = new Date().toISOString().substring(0, 10);
-  const [date, setDate] = useState(today);
-  const [isChecked, setIsChecked] = useState(false);
+  // Get today date
+  const today = new Date();
+  const yyyy = today.getFullYear();
+  let mm = today.getMonth() + 1;
+  let dd = today.getDate();
+  // Format date
+  const formatedToday = mm + "/" + dd + "/" + yyyy;
+  // Set inital date
+  const [date, setDate] = useState(formatedToday);
 
   // Form initial values
   const initialValues: FormValues = {
@@ -33,15 +59,6 @@ const RegisterForm = ({ showForm, setShowForm }: Props) => {
     birth_date: date,
     genre: "",
     agreement: false,
-  };
-
-  //   Input handlers (Date and Checkbox)
-  const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setDate(e.target.value);
-  };
-
-  const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setIsChecked(!isChecked);
   };
   return (
     <div
@@ -78,35 +95,47 @@ const RegisterForm = ({ showForm, setShowForm }: Props) => {
             <h3 className="text-xl font-medium text-gray-900 dark:text-white">
               Register
             </h3>
-            <p className="mb-4 text-sm text-gray-500">Join awesome community</p>
+            <p className="mb-4 text-sm text-gray-500">
+              Join our Web3 community
+            </p>
             <Formik
+              validationSchema={RegisterSchema}
               initialValues={initialValues}
-              onSubmit={(values, actions) => {
-                console.log({ values, actions });
+              onSubmit={(values, { setSubmitting }) => {
                 console.log("val", JSON.stringify(values, null, 2));
-                actions.setSubmitting(false);
+                setSubmitting(false);
               }}
             >
-              {({ values, setFieldValue }) => (
+              {({ errors, touched, values }) => (
                 <Form className="space-y-2" action="#">
                   <div className="grid gap-2 mb-6 md:grid-cols-2">
-                    <div>
-                      <input
+                    <div className="xs: pb-4 md:pb-0">
+                      <Field
                         type="text"
+                        name="first_name"
                         id="first_name"
                         className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                         placeholder="First name"
-                        required
                       />
+                      {errors.first_name && touched.first_name ? (
+                        <div className="text-red-700 text-xs absolute">
+                          {errors.first_name}
+                        </div>
+                      ) : null}
                     </div>
                     <div>
-                      <input
+                      <Field
                         type="text"
+                        name="last_name"
                         id="last_name"
                         className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                         placeholder="Last name"
-                        required
                       />
+                      {errors.last_name && touched.last_name ? (
+                        <div className="text-red-700 text-xs absolute">
+                          {errors.last_name}
+                        </div>
+                      ) : null}
                     </div>
                   </div>
                   <div>
@@ -116,8 +145,12 @@ const RegisterForm = ({ showForm, setShowForm }: Props) => {
                       id="email"
                       className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
                       placeholder="E-mail"
-                      required
                     />
+                    {errors.email && touched.email ? (
+                      <div className="text-red-700 text-xs absolute mr-0 pr-9">
+                        {errors.email}
+                      </div>
+                    ) : null}
                   </div>
                   <div>
                     <label
@@ -132,30 +165,27 @@ const RegisterForm = ({ showForm, setShowForm }: Props) => {
                       id="password"
                       placeholder="••••••••"
                       className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
-                      required
                     />
+                    {errors.password && touched.password ? (
+                      <div className="text-red-700 text-xs absolute">
+                        {errors.password}
+                      </div>
+                    ) : null}
                   </div>
-                  <div>
-                    <label
-                      htmlFor="birth_date"
-                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                    >
+                  <div className="flex flex-row items-center w-full py-2">
+                    <p className="text-sm font-medium text-gray-900 dark:text-white w-1/2">
                       Birth date
-                    </label>
-                    <DatePickerField />
-                    <input
-                      type="date"
-                      id="birth_date"
-                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                      required
-                      value={values.birth_date}
-                      onChange={() => setFieldValue}
-                    />
-                  </div>
-                  <div>
-                    <p className="text-sm mb-2 block font-medium text-gray-900 dark:text-white">
-                      Genre:
                     </p>
+                    <div className="border-gray-300 border p-2 rounded-lg">
+                      <DatePickerField name="birth_date" />
+                      {errors.birth_date && touched.birth_date ? (
+                        <div className="text-red-700 text-xs absolute right-9 pt-3">
+                          {errors.birth_date}
+                        </div>
+                      ) : null}
+                    </div>
+                  </div>
+                  <div className="pt-2">
                     <ul className="grid gap-2 w-full md:grid-cols-3">
                       <li>
                         <Field
@@ -164,7 +194,6 @@ const RegisterForm = ({ showForm, setShowForm }: Props) => {
                           name="genre"
                           value="female"
                           className="hidden peer"
-                          required
                         />
                         <label
                           htmlFor="female"
@@ -180,7 +209,6 @@ const RegisterForm = ({ showForm, setShowForm }: Props) => {
                           name="genre"
                           value="male"
                           className="hidden peer"
-                          required
                         />
                         <label
                           htmlFor="male"
@@ -196,7 +224,6 @@ const RegisterForm = ({ showForm, setShowForm }: Props) => {
                           name="genre"
                           value="custom"
                           className="hidden peer"
-                          required
                         />
                         <label
                           htmlFor="custom"
@@ -216,7 +243,6 @@ const RegisterForm = ({ showForm, setShowForm }: Props) => {
                           type="checkbox"
                           value=""
                           className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:bg-gray-600 dark:border-gray-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800"
-                          required
                           checked={values.agreement}
                         />
                       </div>
@@ -226,6 +252,11 @@ const RegisterForm = ({ showForm, setShowForm }: Props) => {
                       >
                         I agree to the terms and conditions of this website
                       </label>
+                      {errors.agreement && touched.agreement ? (
+                        <div className="text-red-700 text-xs absolute pt-4 ml-6">
+                          {errors.agreement}
+                        </div>
+                      ) : null}
                     </div>
                   </div>
                   <button
