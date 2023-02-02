@@ -8,6 +8,9 @@ module.exports = {
   ],
   theme: {
     extend: {
+      backgroundImage: {
+        "login-screen": "url(/images/login-right.png)",
+      },
       screens: {
         md: "955px",
       },

@@ -1,20 +1,15 @@
 import React, { Dispatch, SetStateAction, useState } from "react";
+import { useRouter } from "next/router";
 import { Field, Form, Formik } from "formik";
 import * as Yup from "yup";
 import differenceInYears from "date-fns/differenceInYears";
 
+// Components
 import DatePickerField from "./DatePickerField";
 
-// Types--/--Interfaces
-interface FormValues {
-  first_name: string;
-  last_name: string;
-  email: string;
-  password: string;
-  birth_date: string;
-  genre: string;
-  agreement: boolean;
-}
+// Types
+import { TRegisterUser } from "../types";
+import { registerUser } from "../actions/user";
 
 type Props = {
   showForm: boolean;
@@ -40,6 +35,8 @@ let RegisterSchema = Yup.object().shape({
 });
 
 const RegisterForm = ({ showForm, setShowForm }: Props) => {
+  const router = useRouter();
+
   // Get today date
   const today = new Date();
   const yyyy = today.getFullYear();
@@ -50,8 +47,10 @@ const RegisterForm = ({ showForm, setShowForm }: Props) => {
   // Set inital date
   const [date, setDate] = useState(formatedToday);
 
+  const [message, setMessage] = useState("");
+
   // Form initial values
-  const initialValues: FormValues = {
+  const initialValues: TRegisterUser = {
     first_name: "",
     last_name: "",
     email: "",
@@ -102,8 +101,15 @@ const RegisterForm = ({ showForm, setShowForm }: Props) => {
               validationSchema={RegisterSchema}
               initialValues={initialValues}
               onSubmit={(values, { setSubmitting }) => {
-                console.log("val", JSON.stringify(values, null, 2));
-                setSubmitting(false);
+                console.log("ok");
+
+                registerUser(values);
+                // Throw error with status code in case Fetch API req failed
+
+                router.push("/");
+
+                // console.log("val", JSON.stringify(values, null, 2));
+                // setSubmitting(false);
               }}
             >
               {({ errors, touched, values }) => (
@@ -265,6 +271,7 @@ const RegisterForm = ({ showForm, setShowForm }: Props) => {
                   >
                     Register
                   </button>
+                  <p>{message}</p>
                 </Form>
               )}
             </Formik>

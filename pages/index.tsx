@@ -1,5 +1,6 @@
 import { GetStaticProps, NextPage } from "next";
 import { useEffect } from "react";
+import { Toaster } from "react-hot-toast";
 import AddPost from "../components/AddPost";
 import Feed from "../components/Feed";
 import MainLayout from "../layouts/MainLayout";
@@ -19,10 +20,13 @@ type User = {
 const Home: NextPage<Props> = ({ users }) => {
   return (
     <MainLayout title="Homepage">
+      <Toaster position="bottom-right" />
       <AddPost />
       <Feed users={users} />
       {users.map((user, i) => (
-        <h1 key={i}>{user.first_name}</h1>
+        <h1 key={i} className="text-amber-700">
+          {user.first_name}
+        </h1>
       ))}
     </MainLayout>
   );

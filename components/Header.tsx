@@ -7,6 +7,8 @@ import {
   BsPerson,
   BsPlusSquare,
 } from "react-icons/bs";
+import { useConnect } from "wagmi";
+import { MetaMaskConnector } from "wagmi/connectors/metaMask";
 import SearchBar from "./SearchBar";
 
 type Props = {
@@ -16,6 +18,19 @@ type Props = {
 export default function Header({ title }: Props) {
   const [isOpen, setIsOpen] = useState(false);
   const user = null;
+
+  const { connectAsync } = useConnect();
+
+  // connect with Metamask
+  const handleAuth = async () => {
+    const { account, chain } = await connectAsync({
+      connector: new MetaMaskConnector(),
+    });
+
+    const userData = { address: account, chainId: chain.id };
+
+    console.log(userData);
+  };
   return (
     <>
       <nav>
@@ -179,6 +194,7 @@ export default function Header({ title }: Props) {
               </a>
               <a
                 href="#"
+                onClick={handleAuth}
                 className="border-violet-600 border-2 px-3 py-1 rounded-lg text-violet-600 ml-4"
               >
                 Connect Wallet
