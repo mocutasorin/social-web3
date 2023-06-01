@@ -10,6 +10,7 @@ import {
 import { useConnect } from "wagmi";
 import { MetaMaskConnector } from "wagmi/connectors/metaMask";
 import SearchBar from "./SearchBar";
+import { useAppContext } from "../context/state";
 
 type Props = {
   title: string;
@@ -17,7 +18,7 @@ type Props = {
 
 export default function Header({ title }: Props) {
   const [isOpen, setIsOpen] = useState(false);
-  const user = null;
+  const { user, setUser } = useAppContext();
 
   const { connectAsync } = useConnect();
 
@@ -116,7 +117,12 @@ export default function Header({ title }: Props) {
                           src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
                           alt=""
                         />
-                        <span className="pl-2">Sam Bankman</span>
+                        <Link
+                          href="/profile"
+                          className="text-lg font-semibold px-2 text-gray-700 flex items-center"
+                        >
+                          <span className="pl-2">{`${user.first_name} ${user.last_name}`}</span>
+                        </Link>
                       </a>
                     ) : (
                       <Link
@@ -221,7 +227,7 @@ export default function Header({ title }: Props) {
                   src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
                   alt=""
                 />
-                <span className="pl-2 ">Sam Bankmam </span>
+                <span className="pl-2 ">{"user.email"}</span>
                 <span className="text-gray-500 font-thin pl-2 hover:text-white">
                   | View Profile
                 </span>

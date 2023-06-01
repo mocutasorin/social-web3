@@ -3,6 +3,8 @@ import { useRouter } from "next/router";
 import { Field, Form, Formik } from "formik";
 import * as Yup from "yup";
 import differenceInYears from "date-fns/differenceInYears";
+import { parse } from "date-fns";
+import { ScaleLoader } from "react-spinners";
 
 // Components
 import DatePickerField from "./DatePickerField";
@@ -10,6 +12,7 @@ import DatePickerField from "./DatePickerField";
 // Types
 import { TRegisterUser } from "../types";
 import { registerUser } from "../actions/user";
+import { useAppContext } from "../context/state";
 
 type Props = {
   showForm: boolean;
@@ -23,9 +26,14 @@ let RegisterSchema = Yup.object().shape({
   password: Yup.string()
     .min(8, "The password may contain at least 8 chars")
     .required("***required"),
-  birth_date: Yup.date()
+  birth_date: Yup.string()
     .test("birth_date", "You should have 18 years", function (value) {
-      return differenceInYears(new Date(), new Date(value)) >= 18;
+      if (value === undefined) {
+        return false;
+      }
+
+      const parsedDate = parse(value, "dd/MM/yyyy", new Date());
+      return differenceInYears(new Date(), parsedDate) >= 18;
     })
     .required("***required"),
   agreement: Yup.bool().oneOf(
@@ -34,8 +42,14 @@ let RegisterSchema = Yup.object().shape({
   ),
 });
 
+// Register Form component
+
 const RegisterForm = ({ showForm, setShowForm }: Props) => {
   const router = useRouter();
+  const [error, setError] = useState("");
+  const [isLoading, setLoading] = useState(false);
+  const { user, setUser } = useAppContext();
+  console.log("uappCont", user);
 
   // Get today date
   const today = new Date();
@@ -48,7 +62,6 @@ const RegisterForm = ({ showForm, setShowForm }: Props) => {
   const [date, setDate] = useState(formatedToday);
 
   const [message, setMessage] = useState("");
-
   // Form initial values
   const initialValues: TRegisterUser = {
     first_name: "",
@@ -100,13 +113,56 @@ const RegisterForm = ({ showForm, setShowForm }: Props) => {
             <Formik
               validationSchema={RegisterSchema}
               initialValues={initialValues}
-              onSubmit={(values, { setSubmitting }) => {
-                console.log("ok");
+              onSubmit={async (values, { setSubmitting }) => {
+                const parsedDate = parse(
+                  values.birth_date,
+                  "dd/MM/yyyy",
+                  new Date()
+                );
 
-                registerUser(values);
+                // Reset previous error and show spinner
+                setError("");
+                setLoading(true);
+
+                try {
+                  // const newUser = await registerUser({
+                  //   first_name: values.first_name,
+                  //   last_name: values.last_name,
+                  //   email: values.email,
+                  //   genre: values.genre,
+                  //   password: values.password,
+                  //   birth_date: values.birth_date,
+                  //   agreement: values.agreement,
+                  // });
+
+                  setUser({
+                    first_name: values.first_name,
+                    last_name: values.last_name,
+                    email: values.email,
+                    genre: values.genre,
+                    password: values.password,
+                    birth_date: values.birth_date,
+                  });
+
+                  // Hide form and display toaster
+                  setShowForm(!showForm);
+
+                  router.push("/");
+                } catch (error: unknown) {
+                  // User already exists or other error occurred
+                  if (error instanceof Error) {
+                    console.log(error);
+                    setError(error.message);
+                  } else {
+                    // Handle other types of errors here
+                    setError("An error occured");
+                  }
+                } finally {
+                  // Hide spinner
+                  setLoading(false);
+                }
+
                 // Throw error with status code in case Fetch API req failed
-
-                router.push("/");
 
                 // console.log("val", JSON.stringify(values, null, 2));
                 // setSubmitting(false);
@@ -114,6 +170,7 @@ const RegisterForm = ({ showForm, setShowForm }: Props) => {
             >
               {({ errors, touched, values }) => (
                 <Form className="space-y-2" action="#">
+                  {error && <div className="text-red-700 text-xs">{error}</div>}
                   <div className="grid gap-2 mb-6 md:grid-cols-2">
                     <div className="xs: pb-4 md:pb-0">
                       <Field
@@ -269,7 +326,18 @@ const RegisterForm = ({ showForm, setShowForm }: Props) => {
                     type="submit"
                     className="w-full text-white bg-gradient-to-r from-violet-500 to-fuchsia-500 hover:to-violet-500 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                   >
-                    Register
+                    {isLoading ? (
+                      <ScaleLoader
+                        color="#fff"
+                        loading={isLoading}
+                        aria-label="Loading Spinner"
+                        data-testid="loader"
+                        height={10}
+                        width={2}
+                      />
+                    ) : (
+                      "Register"
+                    )}
                   </button>
                   <p>{message}</p>
                 </Form>

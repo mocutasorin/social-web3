@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useField, useFormikContext } from "formik";
 import DatePicker from "react-datepicker";
 import { getMonth, getYear } from "date-fns";
@@ -15,7 +15,8 @@ type Props = {
 const DatePickerField = ({ ...props }: Props) => {
   const { setFieldValue } = useFormikContext();
   const [field] = useField(props);
-  console.log(field);
+  const [startDate, setStartDate] = useState(new Date());
+
   const years = range(1927, getYear(new Date()) + 1, 1);
   const months = [
     "January",
@@ -56,7 +57,7 @@ const DatePickerField = ({ ...props }: Props) => {
           </button>
           <select
             value={getYear(date)}
-            onChange={({ target: { value } }) => changeYear(value)}
+            onChange={({ target: { value } }) => changeYear(parseInt(value))}
           >
             {years.map((option) => (
               <option key={option} value={option}>
@@ -83,8 +84,9 @@ const DatePickerField = ({ ...props }: Props) => {
           </button>
         </div>
       )}
-      selected={(field.value && new Date(field.value)) || null}
-      onChange={(val) => {
+      selected={startDate}
+      onChange={(val: Date) => {
+        setStartDate(val);
         setFieldValue(field.name, val?.toLocaleDateString().replace(/-/g, "/"));
       }}
     />

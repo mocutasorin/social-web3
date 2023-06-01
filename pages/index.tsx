@@ -23,21 +23,21 @@ const Home: NextPage<Props> = ({ users }) => {
       <Toaster position="bottom-right" />
       <AddPost />
       <Feed users={users} />
-      {users.map((user, i) => (
+      {/* {users.map((user, i) => (
         <h1 key={i} className="text-amber-700">
           {user.first_name}
         </h1>
-      ))}
+      ))} */}
     </MainLayout>
   );
 };
 
-export const getStaticProps: GetStaticProps<{}> = async () => {
-  const res = await fetch("http://localhost:8080/users/list");
-  const data = await res.json();
-  return {
-    props: { users: data.users },
-  };
-};
+// export const getStaticProps: GetStaticProps<{}> = async () => {
+//   const res = await fetch("http://localhost:8080/users/list");
+//   const data = await res.json();
+//   return {
+//     props: { users: data.users },
+//   };
+// };
 
 export default Home;
