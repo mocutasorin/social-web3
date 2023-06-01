@@ -36,7 +36,7 @@ db.on("error", console.error.bind(console, "MongoDB connection error."));
 
 // Define route handlers
 app.get("/", (req: any, res: any) => {
-  res.send("Hello world");
+  res.send("Hello world!");
 });
 
 app.use("/users", userRoutes);
