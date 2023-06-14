@@ -1,5 +1,4 @@
 "use client";
-import { Metadata } from "next";
 import "../styles/globals.css";
 import { AppProvider } from "../context/state";
 import client from "../lib/wagmiClient";
@@ -22,8 +21,3 @@ export default function RootLayout({
     </html>
   );
 }
-
-// export const metadata: Metadata = {
-//   title: "Home | Etherpost",
-//   description: "Welcome to Etherpost",
-// };

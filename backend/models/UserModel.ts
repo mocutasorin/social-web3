@@ -1,6 +1,7 @@
-import mongoose, { Schema, Types } from "mongoose";
+import mongoose, { Document, Model, Schema, Types } from "mongoose";
+import bcrypt from "bcrypt";
 
-type TUser = {
+interface IUser extends Document {
   first_name: string;
   last_name: string;
   email: string;
@@ -12,9 +13,10 @@ type TUser = {
   friends: Types.ObjectId[];
   friendRequests: Types.ObjectId[];
   createdAt: Date;
-};
+  comparePasswords(password: string): Promise<boolean>;
+}
 
-const UserSchema: Schema<TUser> = new Schema(
+const UserSchema: Schema<IUser> = new Schema(
   {
     first_name: {
       type: String,
@@ -67,6 +69,10 @@ const UserSchema: Schema<TUser> = new Schema(
   { timestamps: true }
 );
 
-const UserModel = mongoose.model("User", UserSchema);
+UserSchema.methods.comparePasswords = async function (password: string) {
+  return await bcrypt.compare(password, this.password);
+};
+
+const UserModel: Model<IUser> = mongoose.model<IUser>("User", UserSchema);
 
 export default UserModel;

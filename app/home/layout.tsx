@@ -28,7 +28,6 @@ export default function MainLayout({ children, title }: Props) {
           <Sidebar />
         </div>
       </div>
-
       <Footer />
     </>
   );
