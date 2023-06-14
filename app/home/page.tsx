@@ -1,9 +1,15 @@
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "My Page Title",
+};
+
 import { GetStaticProps, NextPage } from "next";
 import { useEffect } from "react";
-import { Toaster } from "react-hot-toast";
-import AddPost from "../components/AddPost";
-import Feed from "../components/Feed";
-import MainLayout from "../layouts/MainLayout";
+// import { Toaster } from "react-hot-toast";
+import AddPost from "../../components/AddPost";
+import Feed from "../../components/Feed";
+import MainLayout from "../../layouts/MainLayout";
 
 type Props = {
   users: User[];
@@ -14,21 +20,21 @@ type User = {
   email: string;
   password: string;
   birth_date: string;
-  genre: string;
+  gender: string;
 };
 
 const Home: NextPage<Props> = ({ users }) => {
   return (
-    <MainLayout title="Homepage">
-      <Toaster position="bottom-right" />
+    <div>
+      {/* <Toaster position="bottom-right" /> */}
       <AddPost />
-      <Feed users={users} />
+      {/* <Feed users={users} /> */}
       {/* {users.map((user, i) => (
         <h1 key={i} className="text-amber-700">
           {user.first_name}
         </h1>
       ))} */}
-    </MainLayout>
+    </div>
   );
 };
 

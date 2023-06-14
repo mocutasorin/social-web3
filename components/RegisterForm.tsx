@@ -1,5 +1,6 @@
+"use client";
 import React, { Dispatch, SetStateAction, useState } from "react";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { Field, Form, Formik } from "formik";
 import * as Yup from "yup";
 import differenceInYears from "date-fns/differenceInYears";
@@ -69,7 +70,7 @@ const RegisterForm = ({ showForm, setShowForm }: Props) => {
     email: "",
     password: "",
     birth_date: date,
-    genre: "",
+    gender: "",
     agreement: false,
   };
   return (
@@ -129,7 +130,7 @@ const RegisterForm = ({ showForm, setShowForm }: Props) => {
                   //   first_name: values.first_name,
                   //   last_name: values.last_name,
                   //   email: values.email,
-                  //   genre: values.genre,
+                  //   gender: values.gender,
                   //   password: values.password,
                   //   birth_date: values.birth_date,
                   //   agreement: values.agreement,
@@ -139,7 +140,7 @@ const RegisterForm = ({ showForm, setShowForm }: Props) => {
                     first_name: values.first_name,
                     last_name: values.last_name,
                     email: values.email,
-                    genre: values.genre,
+                    gender: values.gender,
                     password: values.password,
                     birth_date: values.birth_date,
                   });
@@ -254,7 +255,7 @@ const RegisterForm = ({ showForm, setShowForm }: Props) => {
                         <Field
                           type="radio"
                           id="female"
-                          name="genre"
+                          name="gender"
                           value="female"
                           className="hidden peer"
                         />
@@ -269,7 +270,7 @@ const RegisterForm = ({ showForm, setShowForm }: Props) => {
                         <Field
                           type="radio"
                           id="male"
-                          name="genre"
+                          name="gender"
                           value="male"
                           className="hidden peer"
                         />
@@ -284,7 +285,7 @@ const RegisterForm = ({ showForm, setShowForm }: Props) => {
                         <Field
                           type="radio"
                           id="custom"
-                          name="genre"
+                          name="gender"
                           value="custom"
                           className="hidden peer"
                         />

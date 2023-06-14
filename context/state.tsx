@@ -1,3 +1,4 @@
+"use client";
 import React, { createContext, useContext, useState, ReactNode } from "react";
 import { TUser } from "../types";
 
@@ -27,7 +28,7 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
     email: "",
     password: "",
     birth_date: "",
-    genre: "",
+    gender: "",
   });
 
   return (

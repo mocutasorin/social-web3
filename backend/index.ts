@@ -2,8 +2,10 @@ import express from "express";
 const dotenv = require("dotenv");
 const mongoose = require("mongoose");
 const cors = require("cors");
+import Moralis from "moralis";
 
 import userRoutes from "./routes/user.routes";
+import { EvmAddress, EvmChain } from "moralis/common-evm-utils";
 
 // Initialize configuration
 dotenv.config();
@@ -37,6 +39,22 @@ db.on("error", console.error.bind(console, "MongoDB connection error."));
 // Define route handlers
 app.get("/", (req: any, res: any) => {
   res.send("Hello world!");
+});
+
+app.get("/balance", async (req, res) => {
+  try {
+    console.log("request query", req.query);
+    const { address, chainId } = req.query;
+    const response = await Moralis.EvmApi.token.getWalletTokenBalances({
+      address: String(address),
+      chain: Number(chainId),
+    });
+
+    return res.status(200).json(response);
+  } catch (e) {
+    console.log(e);
+    return res.status(400).json();
+  }
 });
 
 app.use("/users", userRoutes);

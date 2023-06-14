@@ -12,7 +12,7 @@ export const registerUser = async ({
   email,
   password,
   birth_date,
-  genre,
+  gender,
   agreement,
 }: TRegisterUser) => {
   const parsedBirthDate = parse(birth_date, "dd/MM/yyyy", new Date());
@@ -28,7 +28,7 @@ export const registerUser = async ({
         email,
         password,
         birth_date: parsedBirthDate,
-        genre,
+        gender,
       }),
     });
     if (response.ok) {

@@ -1,5 +1,6 @@
+"use client";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   BsFillBellFill,
   BsFillPersonPlusFill,
@@ -7,28 +8,62 @@ import {
   BsPerson,
   BsPlusSquare,
 } from "react-icons/bs";
-import { useConnect } from "wagmi";
+import { useAccount, useConnect, useDisconnect } from "wagmi";
 import { MetaMaskConnector } from "wagmi/connectors/metaMask";
 import SearchBar from "./SearchBar";
 import { useAppContext } from "../context/state";
+import { Web3AuthConnector } from "@web3auth/web3auth-wagmi-connector";
 
 type Props = {
   title: string;
 };
 
+type User = {
+  first_name: string;
+  last_name: string;
+};
+
 export default function Header({ title }: Props) {
   const [isOpen, setIsOpen] = useState(false);
-  const { user, setUser } = useAppContext();
+  const [user, setUser] = useState<User | undefined>();
+  const [metamask, setMetamask] = useState(false);
 
   const { connectAsync } = useConnect();
+  const { disconnectAsync } = useDisconnect();
+  const { isConnected } = useAccount();
+
+  // Checking if Metamask is installed and available
+  useEffect(() => {
+    if (typeof window.ethereum !== "undefined" && window.ethereum.isMetaMask) {
+      setMetamask(true);
+    }
+  }, []);
+
+  const getConnector = (metamask: boolean): any => {
+    return metamask
+      ? new MetaMaskConnector()
+      : new Web3AuthConnector({
+          options: {
+            socialLoginConfig: {},
+            enableLogging: true,
+            clientId:
+              "BBK-ogAdTsS3cpep_j-JJlGPKZtrHVRfo1eH4jwbaVqwbe0oV1yqSFHEEHxOboC0gTVpksk2WDJ_QjwI4N-lqjM", // Get your own client id from https://dashboard.web3auth.io
+            network: "testnet", // web3auth network
+            chainId: "0x61", // chainId that you want to connect with
+          },
+        });
+  };
 
   // connect with Metamask
-  const handleAuth = async () => {
+  const handleAuth = async (metamask: boolean) => {
+    if (!isConnected) {
+      await disconnectAsync();
+    }
     const { account, chain } = await connectAsync({
-      connector: new MetaMaskConnector(),
+      connector: getConnector(metamask),
     });
 
-    const userData = { address: account, chainId: chain.id };
+    const userData = { address: account, chainId: chain.id, network: "evm" };
 
     console.log(userData);
   };
@@ -200,7 +235,7 @@ export default function Header({ title }: Props) {
               </a>
               <a
                 href="#"
-                onClick={handleAuth}
+                onClick={() => handleAuth(false)}
                 className="border-violet-600 border-2 px-3 py-1 rounded-lg text-violet-600 ml-4"
               >
                 Connect Wallet

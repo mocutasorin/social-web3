@@ -1,3 +1,4 @@
+"use client";
 import { SyntheticEvent, useRef, useState } from "react";
 import { BsImage, BsPersonPlusFill, BsXCircle } from "react-icons/bs";
 import { toast } from "react-hot-toast";
