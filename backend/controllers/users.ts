@@ -5,24 +5,16 @@ import jwt from "jsonwebtoken";
 import UserModel from "../models/UserModel";
 import { Types } from "mongoose";
 
-export const getUsers = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+export const getUsers = async (req: Request, res: Response) => {
   try {
     const users = await UserModel.find();
     res.json({ users });
   } catch (error) {
-    next(error);
+    res.status(404).json({ message: "There are not any user registered." });
   }
 };
 
-export const addUser = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+export const addUser = async (req: Request, res: Response) => {
   const { email } = req.body;
 
   // Check if the user with the same email already exists
@@ -39,21 +31,24 @@ export const addUser = async (
     });
 
     await newUser.save();
-    res.status(201).json(newUser);
+    // Generate and sign a JWT token
+    const token = jwt.sign(
+      { userId: newUser._id },
+      process.env.AUTHENTICATION_SECRET as string,
+      {
+        expiresIn: "7d",
+      }
+    );
+    res.status(201).json({ token, user: newUser._id });
   } catch (error) {
     res
       .status(400)
       .json({ message: "The server is busy. Please try again later" });
-    next(error);
   }
 };
 
 // Login user
-export const signInUser = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+export const signInUser = async (req: Request, res: Response) => {
   const { email, password } = req.body;
 
   try {
@@ -67,7 +62,7 @@ export const signInUser = async (
     // Compare the provided password with the stored password
     const isPasswordValid = await user.comparePasswords(password);
     if (!isPasswordValid) {
-      return res.status(401).json({ message: "Invalid email or password" });
+      return res.status(401).json({ message: "Invalid email or passsword" });
     }
 
     // Generate and sign a JWT token
@@ -79,18 +74,14 @@ export const signInUser = async (
       }
     );
 
-    res.status(200).json({ token, user: { id: user.id, email: user.email } });
+    res.status(200).json({ token, user: { id: user._id, email: user.email } });
   } catch (error) {
     res.status(500).json({ message: "Sign-in failed" });
   }
 };
 
 // Show user details
-export const showUser = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+export const showUser = async (req: Request, res: Response) => {
   const { id } = req.params;
   const { first_name, last_name, profilePicture, birth_date, gender } =
     req.body;
@@ -105,11 +96,7 @@ export const showUser = async (
 };
 
 // Update user details
-export const editUser = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+export const editUser = async (req: Request, res: Response) => {
   const { id } = req.params;
   const { first_name, last_name, profilePicture, birth_date, gender } =
     req.body;
@@ -150,11 +137,7 @@ export const editUser = async (
 };
 
 // Delete user
-export const deleteUser = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+export const deleteUser = async (req: Request, res: Response) => {
   const { id } = req.params;
   try {
     const user = await UserModel.findById(id);
@@ -172,11 +155,7 @@ export const deleteUser = async (
 };
 
 // Add friend request
-export const addFriendRequest = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+export const addFriendRequest = async (req: Request, res: Response) => {
   const { userId } = req.params;
   const { myId } = req.body;
 
@@ -194,11 +173,7 @@ export const addFriendRequest = async (
 };
 
 // Accept a friend request
-export const acceptFriendRequest = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+export const acceptFriendRequest = async (req: Request, res: Response) => {
   const { myId, friendId } = req.body;
 
   try {
