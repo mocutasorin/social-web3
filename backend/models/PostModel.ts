@@ -1,10 +1,11 @@
 import mongoose, { Schema } from "mongoose";
 
-type TPost = {
+export type TPost = {
   user: Schema.Types.ObjectId;
   content: string;
   image: string;
   likes: Schema.Types.ObjectId[];
+  comments: TComment[];
   createdAt: Date;
   updatedAt: Date;
 };
@@ -50,6 +51,7 @@ const PostSchema: Schema<TPost> = new Schema(
         ref: "User",
       },
     ],
+    comments: [CommentSchema],
   },
   { timestamps: true }
 );

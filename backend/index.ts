@@ -5,6 +5,7 @@ const cors = require("cors");
 import Moralis from "moralis";
 
 import userRoutes from "./routes/user.routes";
+import postRoutes from "./routes/post.routes";
 import { EvmAddress, EvmChain } from "moralis/common-evm-utils";
 
 // Initialize configuration
@@ -58,6 +59,7 @@ app.get("/balance", async (req, res) => {
 });
 
 app.use("/users", userRoutes);
+app.use("/posts", postRoutes);
 
 // Start the express server
 app.listen(port, () => {
