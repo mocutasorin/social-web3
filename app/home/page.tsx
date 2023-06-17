@@ -1,8 +1,5 @@
+"use client";
 import { Metadata } from "next";
-
-export const metadata: Metadata = {
-  title: "My Page Title",
-};
 
 import { GetStaticProps, NextPage } from "next";
 import { useEffect } from "react";
@@ -10,6 +7,7 @@ import { useEffect } from "react";
 import AddPost from "../../components/AddPost";
 import Feed from "../../components/Feed";
 import MainLayout from "../../layouts/MainLayout";
+import { Toaster } from "react-hot-toast";
 
 type Props = {
   users: User[];
@@ -26,9 +24,9 @@ type User = {
 const Home: NextPage<Props> = ({ users }) => {
   return (
     <div>
-      {/* <Toaster position="bottom-right" /> */}
+      <Toaster position="bottom-right" />
       <AddPost />
-      {/* <Feed users={users} /> */}
+      <Feed />
       {/* {users.map((user, i) => (
         <h1 key={i} className="text-amber-700">
           {user.first_name}

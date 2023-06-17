@@ -7,6 +7,7 @@ export type TUser = {
   password: string;
   birth_date: string;
   gender: string;
+  _id: string;
 };
 
 export type TRegisterUser = TUser & {

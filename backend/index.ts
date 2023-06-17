@@ -42,21 +42,21 @@ app.get("/", (req: any, res: any) => {
   res.send("Hello world!");
 });
 
-app.get("/balance", async (req, res) => {
-  try {
-    console.log("request query", req.query);
-    const { address, chainId } = req.query;
-    const response = await Moralis.EvmApi.token.getWalletTokenBalances({
-      address: String(address),
-      chain: Number(chainId),
-    });
+// app.get("/balance", async (req, res) => {
+//   try {
+//     console.log("request query", req.query);
+//     const { address, chainId } = req.query;
+//     const response = await Moralis.EvmApi.token.getWalletTokenBalances({
+//       address: String(address),
+//       chain: Number(chainId),
+//     });
 
-    return res.status(200).json(response);
-  } catch (e) {
-    console.log(e);
-    return res.status(400).json();
-  }
-});
+//     return res.status(200).json(response);
+//   } catch (e) {
+//     console.log(e);
+//     return res.status(400).json();
+//   }
+// });
 
 app.use("/users", userRoutes);
 app.use("/posts", postRoutes);
