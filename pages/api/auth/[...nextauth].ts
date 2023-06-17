@@ -40,7 +40,10 @@ export const authOptions: NextAuthOptions = {
         }
         // Return null if user data could not be retrieved
         return null;
-      },
+      } catch(error: unknown) {
+        if(error instanceof Error)
+        return error.message
+      }
     }),
     MoralisNextAuthProvider(),
     // GoogleProvider({
