@@ -27,23 +27,23 @@ export const authOptions: NextAuthOptions = {
         // You can also use the `req` object to obtain additional parameters
         // (i.e., the request IP address)
         try {
-        const res = await fetch("/your/endpoint", {
-          method: "POST",
-          body: JSON.stringify(credentials),
-          headers: { "Content-Type": "application/json" },
-        });
-        const user = await res.json();
+          const res = await fetch("/your/endpoint", {
+            method: "POST",
+            body: JSON.stringify(credentials),
+            headers: { "Content-Type": "application/json" },
+          });
+          const user = await res.json();
 
-        // If no error and we have user data, return it
-        if (res.ok && user) {
-          return user;
+          // If no error and we have user data, return it
+          if (res.ok && user) {
+            return user;
+          }
+          // Return null if user data could not be retrieved
+          return null;
+        } catch (error: unknown) {
+          if (error instanceof Error) return error.message;
         }
-        // Return null if user data could not be retrieved
-        return null;
-      } catch(error: unknown) {
-        if(error instanceof Error)
-        return error.message
-      }
+      },
     }),
     MoralisNextAuthProvider(),
     // GoogleProvider({
