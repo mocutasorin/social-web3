@@ -13,6 +13,7 @@ import { MetaMaskConnector } from "wagmi/connectors/metaMask";
 import SearchBar from "./SearchBar";
 import { useAppContext } from "../context/state";
 import { Web3AuthConnector } from "@web3auth/web3auth-wagmi-connector";
+import Image from "next/image";
 
 type Props = {
   title: string;
@@ -125,12 +126,16 @@ export default function Header({ title }: Props) {
             <div className="flex sm:flex-1 items-center justify-center sm:items-stretch sm:justify-start">
               {/* Logo */}
               <div className="flex items-center ml-14 relative sm:ml-0">
-                <img
+                <Image
+                  width={32}
+                  height={32}
                   className="block h-8 w-auto lg:hidden"
                   src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
                   alt="Your Company"
                 />
-                <img
+                <Image
+                  width={32}
+                  height={32}
                   className="hidden h-8 w-auto lg:block"
                   src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
                   alt="Your Company"
@@ -147,7 +152,9 @@ export default function Header({ title }: Props) {
                         href="#"
                         className="text-lg font-semibold px-2 text-gray-700 flex items-center"
                       >
-                        <img
+                        <Image
+                          width={32}
+                          height={32}
                           className="h-8 w-8 rounded-full"
                           src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
                           alt=""
@@ -257,7 +264,9 @@ export default function Header({ title }: Props) {
                 href="#"
                 className="text-lg font-semibold px-3 py-4 text-gray-700 flex items-center hover:bg-gray-700 hover:text-white"
               >
-                <img
+                <Image
+                  width={32}
+                  height={32}
                   className="h-8 w-8 rounded-full"
                   src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
                   alt=""

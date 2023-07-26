@@ -126,15 +126,15 @@ const RegisterForm = ({ showForm, setShowForm }: Props) => {
                 setLoading(true);
 
                 try {
-                  // const newUser = await registerUser({
-                  //   first_name: values.first_name,
-                  //   last_name: values.last_name,
-                  //   email: values.email,
-                  //   gender: values.gender,
-                  //   password: values.password,
-                  //   birth_date: values.birth_date,
-                  //   agreement: values.agreement,
-                  // });
+                  const newUser = await registerUser({
+                    first_name: values.first_name,
+                    last_name: values.last_name,
+                    email: values.email,
+                    gender: values.gender,
+                    password: values.password,
+                    birth_date: values.birth_date,
+                    agreement: values.agreement,
+                  });
 
                   setUser({
                     first_name: values.first_name,
@@ -143,6 +143,7 @@ const RegisterForm = ({ showForm, setShowForm }: Props) => {
                     gender: values.gender,
                     password: values.password,
                     birth_date: values.birth_date,
+                    _id: newUser._id,
                   });
 
                   // Hide form and display toaster

@@ -8,7 +8,7 @@ type ModalState = {
   setShowForm: Dispatch<SetStateAction<boolean>>;
 };
 
-const auth = () => {
+const Auth = () => {
   const [showForm, setShowForm] = useState<boolean>(false);
   return (
     <div className="flex">
@@ -36,4 +36,4 @@ const auth = () => {
   );
 };
 
-export default auth;
+export default Auth;

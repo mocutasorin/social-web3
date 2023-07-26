@@ -21,7 +21,7 @@ type User = {
   gender: string;
 };
 
-const Home: NextPage<Props> = ({ users }) => {
+const Home: NextPage = () => {
   return (
     <div>
       <Toaster position="bottom-right" />

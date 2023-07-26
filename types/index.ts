@@ -10,6 +10,12 @@ export type TUser = {
   _id: string;
 };
 
-export type TRegisterUser = TUser & {
+export type TRegisterUser = {
+  first_name: string;
+  last_name: string;
+  email: string;
+  password: string;
+  birth_date: string;
+  gender: string;
   agreement: boolean;
 };

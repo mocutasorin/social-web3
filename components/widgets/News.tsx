@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 const News = () => (
   <div className="bg-white border-gray-200 border-solid border p-3">
     <div className="flex items-center pb-5 justify-between">
@@ -9,10 +11,11 @@ const News = () => (
 
     <div className="flex pb-5">
       <div className="hidden md:w-1/3 md:flex items-center">
-        <img
+        <Image
           src="https://source.unsplash.com/random/100x100"
           height={100}
           width={100}
+          alt="PostImage"
         />
       </div>
       <div className="md:w-2/3 pl-2">
@@ -30,10 +33,11 @@ const News = () => (
     </div>
     <div className="flex pb-5">
       <div className="hidden md:w-1/3 md:flex items-center">
-        <img
+        <Image
           src="https://source.unsplash.com/random/101x101"
           height={100}
           width={100}
+          alt="Post2 Image"
         />
       </div>
       <div className="md:w-2/3 pl-2">

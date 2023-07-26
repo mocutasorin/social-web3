@@ -2,6 +2,7 @@
 import { SyntheticEvent, useRef, useState } from "react";
 import { BsImage, BsPersonPlusFill, BsXCircle } from "react-icons/bs";
 import { toast } from "react-hot-toast";
+import Image from "next/image";
 
 const AddPost = () => {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -47,10 +48,12 @@ const AddPost = () => {
       {/* Text input */}
       <div className="flex flex-1 flex-col w-full px-10 pb-5">
         <div className="flex flex-row">
-          <img
+          <Image
             className="h-8 w-8 rounded-full"
             src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
             alt=""
+            width={256}
+            height={256}
           />
           <textarea
             ref={textareaRef}
@@ -66,7 +69,13 @@ const AddPost = () => {
               className="text-3xl mt-2 ml-2 absolute rounded-3xl bg-gradient-to-r from-violet-500 to-fuchsia-500 hover:to-violet-500 hover: cursor-pointer"
               onClick={removeImage}
             />
-            <img className="rounded-md px-15" src={imageURL} />
+            <Image
+              width={32}
+              height={32}
+              className="rounded-md px-15"
+              src={imageURL}
+              alt=""
+            />
           </div>
         )}
       </div>

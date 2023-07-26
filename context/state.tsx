@@ -1,6 +1,6 @@
 "use client";
 import React, { createContext, useContext, useState, ReactNode } from "react";
-import { TUser } from "../types";
+import { TRegisterUser, TUser } from "../types";
 
 type AppContextType = {
   user: TUser;
@@ -29,6 +29,7 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
     password: "",
     birth_date: "",
     gender: "",
+    _id: "",
   });
 
   return (
